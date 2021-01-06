@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>ID CHAT</title>
+        <link rel="stylesheet" href="{{asset('assets/css/bootstrap/bootstrap.min.css')}}">
+        <link href="{{asset('assets/css/fontawesome/css/all.css')}}" rel="stylesheet">
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+    <div class="container-fluid">
+        <div class="row bg-primary">
+            <div class="col-12 text-center">
+                <h1 class="text-white">ID Chat</h1>
+            </div>
+            <div class="col-12 text-right mb-2">
+                <a href="{{path('app_login')}}"><button class="btn btn-outline-light">Connexion</button></a>
+                <a href="{{path('app_register')}}"><button class="btn btn-outline-light">Inscription</button></a>
+            </div>
+    </div>
+        {% block body %}{% endblock %}
+        <script src="{{asset('assets/js/jquery/jquery-3.5.1.js')}}"></script>
+        <script src="{{asset('assets/js/bootstrap/bootstrap.js')}}"></script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
