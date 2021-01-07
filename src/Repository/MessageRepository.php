@@ -19,6 +19,46 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
+    /**
+     * @param $offset
+     * @return Message[]
+     */
+    public function getNewMessages($offset){
+        return $this->createQueryBuilder('m')
+            ->where('m.id > :offset' )
+            ->setParameter('offset', $offset)
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param $offset
+     * @return Message[]
+     */
+    public function getOlderMessages($offset){
+        return $this->createQueryBuilder('m')
+            ->where('m.id < :offset' )
+            ->setParameter('offset', $offset)
+            ->orderBy('m.id', 'DESC')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Message[]
+     */
+    public function getCurrentMessages(){
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.id', 'DESC')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult();
+
+    }
+
     // /**
     //  * @return Message[] Returns an array of Message objects
     //  */

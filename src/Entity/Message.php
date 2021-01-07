@@ -20,20 +20,16 @@ class Message
     /**
      * @ORM\Column(type="text")
      */
-    private $message;
+    private $content;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $date;
+    private $sendAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $picture;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="relation")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
@@ -42,38 +38,26 @@ class Message
         return $this->id;
     }
 
-    public function getMessage(): ?string
+    public function getContent(): ?string
     {
-        return $this->message;
+        return $this->content;
     }
 
-    public function setMessage(string $message): self
+    public function setContent(string $content): self
     {
-        $this->message = $message;
+        $this->content = $content;
 
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getSendAt(): ?\DateTimeInterface
     {
-        return $this->date;
+        return $this->sendAt;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setSendAt(\DateTimeInterface $sendAt): self
     {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    public function getPicture(): ?string
-    {
-        return $this->picture;
-    }
-
-    public function setPicture(string $picture): self
-    {
-        $this->picture = $picture;
+        $this->sendAt = $sendAt;
 
         return $this;
     }

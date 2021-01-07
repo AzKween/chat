@@ -39,13 +39,18 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="user")
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $relation;
+    private $lastSeen;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $messages;
 
     public function __construct()
     {
-        $this->relation = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,33 +126,59 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection|Message[]
-     */
-    public function getRelation(): Collection
+    public function getLastSeen(): ?\DateTimeInterface
     {
-        return $this->relation;
+        return $this->lastSeen;
     }
 
-    public function addRelation(Message $relation): self
+    public function setLastSeen(?\DateTimeInterface $lastSeen): self
     {
-        if (!$this->relation->contains($relation)) {
-            $this->relation[] = $relation;
-            $relation->setUser($this);
+        $this->lastSeen = $lastSeen;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|message[]
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeRelation(Message $relation): self
+    public function removeMessage(message $message): self
     {
-        if ($this->relation->removeElement($relation)) {
+        if ($this->messages->removeElement($message)) {
             // set the owning side to null (unless already changed)
-            if ($relation->getUser() === $this) {
-                $relation->setUser(null);
+            if ($message->getUser() === $this) {
+                $message->setUser(null);
             }
         }
 
         return $this;
+    }
+
+    public function isOnline(){
+        if ($this->getLastSeen() == null){
+            return false;
+        }{
+            $currentDate = new \DateTime('now');
+            $comparaisonDate = $currentDate->modify('-20 seconds');
+            return $this->getLastSeen() >= $comparaisonDate ;
+        }
+        // 9:48:25 => actuellement ($currentDate)
+        //$comparaisonDate = $currentDate - 10 s => 9:48:15
+        // $lastLogin >= $comparaison
+        // 9:48:20    >= 9:48:15 => JE SUIS EN LIGNE
     }
 }
