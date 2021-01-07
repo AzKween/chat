@@ -52,7 +52,7 @@ class MessageRepository extends ServiceEntityRepository
      */
     public function getCurrentMessages(){
         return $this->createQueryBuilder('m')
-            ->orderBy('m.id', 'DESC')
+            ->orderBy('m.id', 'ASC')
             ->setMaxResults(20)
             ->getQuery()
             ->getResult();
